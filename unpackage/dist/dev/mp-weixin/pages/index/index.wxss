@@ -1,0 +1,148 @@
+
+.price {
+  font-size: 28rpx;
+}
+.images {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 10rpx;
+}
+/* flex 横向 */
+.flex {
+
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+}
+/* flex 纵向 */
+.flex-col {
+
+  display: flex;
+
+  flex-direction: column;
+}
+/* flex不换行 */
+.flex-wrap {
+  flex-wrap: wrap;
+}
+/* 垂直居中 */
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+/* 垂直居中 */
+.col-center {
+  align-items: center;
+}
+/* 顶部对齐 */
+.col-top {
+  align-items: flex-start;
+}
+/* 底部对齐 */
+.col-bottom {
+  align-items: flex-end;
+}
+/* 左边对齐 */
+.row-left {
+  justify-content: flex-start;
+}
+/* 水平居中 */
+.row-center {
+  justify-content: center;
+}
+/* 右边对齐 */
+.row-right {
+  justify-content: flex-end;
+}
+/* 水平两端对齐，项目之间的间隔都相等 */
+.row-between {
+  justify-content: space-between;
+}
+/* 水平每个项目两侧的间隔相等，所以项目之间的间隔比项目与父元素两边的间隔大一倍 */
+.row-around {
+  justify-content: space-around;
+}
+.left {
+  background-color: #fff;
+  display: flex;
+}
+.left-sw {
+  background-color: #f4f4f4;
+}
+.banner {
+  width: 100%;
+  height: 370rpx;
+}
+.main-card-label {
+  width: 100%;
+  font-size: 26rpx;
+  color: #303030;
+  height: 50rpx;
+  display: flex;
+  align-items: center;
+}
+.main-card {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.main-item {
+  margin-bottom: 10rpx;
+  border-radius: 0rpx;
+  border: 0rpx solid red;
+  padding: 20rpx 30rpx 0 30rpx;
+}
+.itemlabel {
+  width: 100%;
+  height: 100rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #303030;
+  font-size: 26rpx;
+}
+/* .aaaa{ */
+/* } */
+.fixed {
+  position: fixed;
+  z-index: 99;
+}
+.VerticalNav.nav {
+  width: 200rpx;
+  white-space: initial;
+}
+.VerticalNav.nav .cu-item {
+  width: 100%;
+  text-align: center;
+  background-color: #fff;
+  margin: 0;
+  border: none;
+  height: 50px;
+  position: relative;
+}
+.VerticalNav.nav .cu-item.cur {
+  background-color: #f1f1f1;
+}
+.VerticalNav.nav .cu-item.cur::after {
+  content: '';
+  width: 8rpx;
+  height: 30rpx;
+  border-radius: 10rpx 0 0 10rpx;
+  position: absolute;
+  background-color: currentColor;
+  top: 0;
+  right: 0rpx;
+  bottom: 0;
+  margin: auto;
+}
+.VerticalBox {
+  display: flex;
+}
+.VerticalMain {
+  background-color: #f1f1f1;
+  flex: 1;
+}
+

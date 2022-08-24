@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "飞房网",
+  "usingComponents": {
+    "u-swiper": "/uni_modules/uview-ui/components/u-swiper/u-swiper",
+    "u-tag": "/uni_modules/uview-ui/components/u-tag/u-tag"
+  }
+}

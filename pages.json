@@ -1,0 +1,45 @@
+{
+  "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "飞房网"
+      }
+    }, {
+      "path": "pages/index/about",
+      "style": {
+        "navigationBarTitleText": "关于我们",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "pages/index/web",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "飞房网",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+  // "tabBar": {
+  //   "color": "#666666",
+  //   "selectedColor": "#1296db",
+  //   "backgroundColor": "#FFFFFF",
+  //   "borderStyle": "black",
+  //   "list": [{
+  //     "pagePath": "pages/index/index",
+  //     "iconPath": "static/home.png",
+  //     "selectedIconPath": "static/home_.png",
+  //     "text": "主页"
+  //   }, {
+  //     "pagePath": "pages/index/about",
+  //     "iconPath": "static/guanyu.png",
+  //     "selectedIconPath": "static/guanyu_.png",
+  //     "text": "关于我们"
+  //   }]
+  // }
+}
