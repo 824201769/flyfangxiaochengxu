@@ -133,7 +133,9 @@ export default {
   methods: {
     click() {
       uni.navigateTo({
-        url: '/pages/index/web?url=https://www.flyfang.cn/xiaochengxu/index.html',
+        url:
+          '/pages/index/web?url=https://www.flyfang.cn/xiaochengxu/index.html?str=' +
+          new Date().getTime(),
       });
     },
     topath(item) {
