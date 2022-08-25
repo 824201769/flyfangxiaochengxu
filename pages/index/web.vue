@@ -10,8 +10,8 @@ export default {
       httpurl: '',
     };
   },
-  onLoad(opt) {
-    this.httpurl = opt.url;
+  onLoad() {
+    this.httpurl = uni.getStorageSync('url');
   },
 };
 </script>

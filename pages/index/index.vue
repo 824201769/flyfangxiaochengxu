@@ -1,74 +1,67 @@
 <template>
-  <view>
-    <view id="headinga">
-      <view class="banner">
-        <u-swiper radius="0" height="350rpx" :list="list1" @click="click"></u-swiper>
-      </view>
+  <view class="u-wrap">
+    <view class="banner">
+      <u-swiper radius="0" height="350rpx" :list="list1" @click="click"></u-swiper>
     </view>
-
-    <view class="left" style="margin: 0 15rpx;">
-      <view class="left-sw" v-if="prodlist.length >= 1">
-        <swiper
-          :duration="500"
-          :vertical="true"
-          :circular="true"
-          :display-multiple-items="prodlist.length"
-          :style="'height:' + hh + 'px;width:150rpx'"
-          :current-item-id="navScroll"
-        >
-          <swiper-item v-for="(item, index) in navList" :key="index" class="" :item-id="item.navId">
-            <view
-              class="itemlabel"
-              :style="
-                navNow == item.navId
-                  ? 'background-color:#fff;border-left: 8rpx solid rgb(90, 196, 70);'
-                  : 'background-color: #f4f4f4;'
-              "
-              @click="onNav(item, item.navId)"
-            >
-              {{ item.label }}
-            </view>
-          </swiper-item>
-        </swiper>
-      </view>
-
+    <view class="u-menu-wrap">
       <scroll-view
-        :scroll-y="true"
-        :scroll-with-animation="true"
-        :enable-back-to-top="true"
-        :style="'height:' + hh + 'px'"
-        :scroll-into-view="scrollintoview"
-        @scroll="myonPageScroll"
+        scroll-y
+        scroll-with-animation
+        class="u-tab-view menu-scroll-view"
+        style="background-color: #f6f6f6;"
+        :scroll-top="scrollTop"
+        :scroll-into-view="itemId"
       >
         <view
-          v-for="(item, index) in mainList"
+          v-for="(item, index) in tabbar"
           :key="index"
-          :id="item.navId"
-          :data-nav-id="item.navId"
-          :data-nav-scroll-id="item.navScrollId"
-          class="trip main-item"
-          style=""
+          class="u-tab-item"
+          :class="[current == index ? 'u-tab-item-active' : '']"
+          @tap.stop="swichMenu(index)"
         >
-          <view class="main-card" v-for="(items, indexss) in item.list" :key="indexss">
-            <view class="main-card-label">{{ item.label }}</view>
-            <view class="flex row-between" style="margin-top: 10rpx;" @click="topath(items)">
-              <view class="images"><image :src="items.image" class="images" mode=""></image></view>
-              <view
-                class=" flex row-left col-top flex-col row-between"
-                style="margin-left: 20rpx;height: 180rpx;width: 340rpx;"
-              >
-                <view class="u-line-1" style="font-size: 36rpx;">{{ items.label }}</view>
-                <u-tag
-                  :text="items.mianji"
-                  size="mini"
-                  borderColor="rgb(239,239,239)"
-                  bgColor="rgb(239,239,239)"
-                  color="rgb(153,153,153)"
-                ></u-tag>
-                <view class="flex row-between">
-                  <view class="price u-error">
-                    <text style="font-size: 40rpx;font-weight: bold;">{{ items.price }}</text>
-                    <text style="font-size: 20rpx;">/元m²</text>
+          <text class="u-line-1">{{ item.label }}</text>
+        </view>
+      </scroll-view>
+      <scroll-view
+        :scroll-top="scrollRightTop"
+        scroll-y
+        scroll-with-animation
+        class="right-box"
+        @scroll="rightScroll"
+      >
+        <view class="page-view">
+          <view
+            class="class-item"
+            :id="'item' + index"
+            v-for="(item, index) in tabbar"
+            :key="index"
+          >
+            <view class="item-title">
+              <text>{{ item.label }}</text>
+            </view>
+
+            <view v-for="(item1, index1) in item.list" :key="index1" style="margin-bottom: 40rpx;">
+              <view class="flex row-between" style="margin-top: 10rpx;" @click="topath(item1)">
+                <view class="images">
+                  <image :src="item1.image" class="images" mode=""></image>
+                </view>
+                <view
+                  class=" flex row-left col-top flex-col row-between"
+                  style="margin-left: 20rpx;height: 180rpx;width: 340rpx;"
+                >
+                  <view class="u-line-1" style="font-size: 30rpx;">{{ item1.label }}</view>
+                  <u-tag
+                    :text="item1.mianji"
+                    size="mini"
+                    borderColor="rgb(239,239,239)"
+                    bgColor="rgb(239,239,239)"
+                    color="rgb(153,153,153)"
+                  ></u-tag>
+                  <view class="flex row-between">
+                    <view class="price u-error">
+                      <text style="font-size: 40rpx;font-weight: bold;">{{ item1.price }}</text>
+                      <text style="font-size: 20rpx;">/元m²</text>
+                    </view>
                   </view>
                 </view>
               </view>
@@ -79,9 +72,7 @@
     </view>
   </view>
 </template>
-
 <script>
-import data from '@/data.js';
 export default {
   data() {
     return {
@@ -89,218 +80,183 @@ export default {
         'https://www.flyfang.cn/xiaochengxu/banner/1.png',
         'https://www.flyfang.cn/xiaochengxu/banner/2.png',
       ],
-      list_data_right: [],
-      list_data_left: [],
-      list: [],
-      tabCur: 0,
-      mainCur: 0,
-      verticalNavTop: 0,
-      load: true,
-      heightleft: 100,
-      hh: 0,
-      scrolltop: 0,
-      scrollintoview: '',
-      mainList: [],
-      navList: [],
-      navCount: 0,
-      navNow: 0,
-      vue_all_list: [],
-      my_hua_dong_num: 0,
-      navScroll: '',
-      prodlist: [],
+      scrollTop: 0, //tab标题的滚动条位置
+      oldScrollTop: 0,
+      current: 0, // 预设当前项的值
+      menuHeight: 0, // 左边菜单的高度
+      menuItemHeight: 0, // 左边菜单item的高度
+      itemId: '', // 栏目右边scroll-view用于滚动的id
+      tabbar: [],
+      menuItemPos: [],
+      arr: [],
+      scrollRightTop: 0, // 右边栏目scroll-view的滚动条高度
+      timer: null, // 定时器
     };
   },
-
   onLoad() {
-    let that = this;
-    uni.$u.http.get('/get').then(res => {
-      that.prodlist = res;
-      that.list_data_left_api();
-      let list = [{}];
-      for (let i = 0; i < 26; i++) {
-        list[i] = {};
-        list[i].name = String.fromCharCode(65 + i);
-        list[i].id = i;
-      }
-      that.list = list;
-      that.listCur = list[0];
+    // #ifdef MP-TOUTIAO
+
+    uni.$u.http.get('/douyin').then(res => {
+      this.tabbar = res;
     });
+    // #endif
+    // #ifdef MP-WEIXIN
+    uni.$u.http.get('/get').then(res => {
+      this.tabbar = res;
+    });
+    // #endif
   },
   onReady() {
-    this._onReadyApi();
-    uni.hideLoading();
+    this.getMenuItemTop();
   },
   methods: {
-    click() {
+    click(index) {
+      if (index == 0) {
+        // #ifdef MP-TOUTIAO
+        uni.setStorageSync('url', 'https://www.flyfang.cn/dyxiaochengxu/index1.html');
+        // #endif
+        // #ifdef MP-WEIXIN
+        uni.setStorageSync('url', 'https://www.flyfang.cn/xiaochengxu/index1.html');
+        // #endif
+      } else {
+        // #ifdef MP-TOUTIAO
+        uni.setStorageSync('url', 'https://www.flyfang.cn/dyxiaochengxu/index2.html');
+        // #endif
+        // #ifdef MP-WEIXIN
+        uni.setStorageSync('url', 'https://www.flyfang.cn/xiaochengxu/index2.html');
+        // #endif
+      }
       uni.navigateTo({
-        url:
-          '/pages/index/web?url=https://www.flyfang.cn/xiaochengxu/index.html?str=' +
-          new Date().getTime(),
+        url: '/pages/index/web',
       });
     },
     topath(item) {
+      uni.setStorageSync('url', item.url);
       uni.navigateTo({
-        url: '/pages/index/web?url=' + item.url,
+        url: '/pages/index/web',
       });
     },
-    myonPageScroll(e) {
-      this.my_hua_dong_num = Math.round(e.detail.scrollTop).toString();
-
-      var num = e.currentTarget.offsetTop + e.detail.scrollTop;
-
-      var ww = this.vue_all_list.find(v => v.top >= num);
-
-      if (e.detail.scrollTop <= 70) {
-        this.navNow = this.navList[0].navId;
-      } else {
-        this.navNow = ww.id;
+    // 点击左边的栏目切换
+    async swichMenu(index) {
+      if (this.arr.length == 0) {
+        await this.getMenuItemTop();
       }
-
-      if (ww.dataset.navScrollId) {
-        this.navScroll = ww.dataset.navScrollId;
-      } else {
-        this.navScroll = this.navNow;
-      }
+      if (index == this.current) return;
+      this.scrollRightTop = this.oldScrollTop;
+      this.$nextTick(function() {
+        this.scrollRightTop = this.arr[index];
+        this.current = index;
+        this.leftMenuStatus(index);
+      });
     },
-    TabSelect(e) {
-      this.tabCur = e.currentTarget.dataset.id;
-      this.mainCur = e.currentTarget.dataset.id;
-      this.verticalNavTop = (e.currentTarget.dataset.id - 1) * 50;
+    // 获取一个目标元素的高度
+    getElRect(elClass, dataVal) {
+      new Promise((resolve, reject) => {
+        const query = uni.createSelectorQuery().in(this);
+        query
+          .select('.' + elClass)
+          .fields(
+            {
+              size: true,
+            },
+            res => {
+              // 如果节点尚未生成，res值为null，循环调用执行
+              if (!res) {
+                setTimeout(() => {
+                  this.getElRect(elClass);
+                }, 10);
+                return;
+              }
+              this[dataVal] = res.height;
+              resolve();
+            },
+          )
+          .exec();
+      });
     },
-    VerticalMain(e) {
-      // #ifdef MP-ALIPAY
-      return false; //支付宝小程序暂时不支持双向联动
-      // #endif
-      let that = this;
-      let tabHeight = 0;
-      if (this.load) {
-        for (let i = 0; i < this.list.length; i++) {
-          let view = uni.createSelectorQuery().select('#main-' + this.list[i].id);
-          view
-            .fields(
-              {
-                size: true,
-              },
-              data => {
-                this.list[i].top = tabHeight;
-                tabHeight = tabHeight + data.height;
-                this.list[i].bottom = tabHeight;
-              },
-            )
-            .exec();
-        }
-        this.load = false;
-      }
-      let scrollTop = e.detail.scrollTop + 10;
-      for (let i = 0; i < this.list.length; i++) {
-        if (scrollTop > this.list[i].top && scrollTop < this.list[i].bottom) {
-          this.verticalNavTop = (this.list[i].id - 1) * 50;
-          this.tabCur = this.list[i].id;
-          return false;
-        }
-      }
-    },
-
-    list_data_left_api() {
-      var that = this;
-      //mainList
-      var mainList = [];
-      var navList = [];
-      // navList
-      var list_data_left = [];
-      var navScrollId = '';
-
-      let prevNav = '';
-
-      var i = 0;
-      for (i; i < this.prodlist.length; i++) {
-        const mainId = 'main-' + i;
-        const navId = 'nav-' + i;
-        const tId = this.prodlist[i].label;
-
-        if (!prevNav) {
-          prevNav = navId;
-        }
-
-        mainList.push({
-          label: tId,
-          id: mainId,
-          navId: navId,
-          navScrollId: prevNav,
-          list: this.prodlist[i].list,
-        });
-
-        navList.push({
-          navId: navId,
-          mainId: mainId,
-          label: tId,
-        });
-
-        prevNav = navId;
-      }
-
-      this.mainList = mainList;
-      this.navList = navList;
-      // this.list_data_left = list_data_left
-
-      this.navNow = this.navList[0].navId;
-
-      setTimeout(function() {
-        wx.createSelectorQuery()
-          .selectAll('.main-item')
-          .fields({
-            // id:true,
-            id: true,
-            dataset: true,
-            rect: true,
+    // 观测元素相交状态
+    async observer() {
+      this.tabbar.map((val, index) => {
+        let observer = uni.createIntersectionObserver(this);
+        // 检测右边scroll-view的id为itemxx的元素与right-box的相交状态
+        // 如果跟.right-box底部相交，就动态设置左边栏目的活动状态
+        observer
+          .relativeTo('.right-box', {
+            top: 0,
           })
-          .exec(res => {
-            that.vue_all_list = res[0];
+          .observe('#item' + index, res => {
+            if (res.intersectionRatio > 0) {
+              let id = res.id.substring(4);
+              this.leftMenuStatus(id);
+            }
           });
-      }, 300);
+      });
     },
-
-    list_data_right_api() {
-      var list_data_right = [];
-
-      var i = 0;
-      for (i; i < 100; i++) {
-        list_data_right.push({
-          id: (10000 + i).toString(),
-          start: '呵呵',
-        });
+    // 设置左边菜单的滚动状态
+    async leftMenuStatus(index) {
+      this.current = index;
+      // 如果为0，意味着尚未初始化
+      if (this.menuHeight == 0 || this.menuItemHeight == 0) {
+        await this.getElRect('menu-scroll-view', 'menuHeight');
+        await this.getElRect('u-tab-item', 'menuItemHeight');
       }
-
-      this.list_data_right = list_data_right;
+      // 将菜单活动item垂直居中
+      this.scrollTop = index * this.menuItemHeight + this.menuItemHeight / 2 - this.menuHeight / 2;
     },
-    onNav(e, kk) {
-      var value = e.navId;
-
-      if (e) {
-        this.scrollintoview = value;
-
-        this.navNow = kk;
+    // 获取右边菜单每个item到顶部的距离
+    getMenuItemTop() {
+      new Promise(resolve => {
+        let selectorQuery = uni.createSelectorQuery();
+        selectorQuery
+          .selectAll('.class-item')
+          .boundingClientRect(rects => {
+            // 如果节点尚未生成，rects值为[](因为用selectAll，所以返回的是数组)，循环调用执行
+            if (!rects.length) {
+              setTimeout(() => {
+                this.getMenuItemTop();
+              }, 10);
+              return;
+            }
+            rects.forEach(rect => {
+              // 这里减去rects[0].top，是因为第一项顶部可能不是贴到导航栏(比如有个搜索框的情况)
+              this.arr.push(rect.top - rects[0].top);
+              resolve();
+            });
+          })
+          .exec();
+      });
+    },
+    // 右边菜单滚动
+    async rightScroll(e) {
+      this.oldScrollTop = e.detail.scrollTop;
+      if (this.arr.length == 0) {
+        await this.getMenuItemTop();
       }
-    },
-    _onReadyApi() {
-      var windowHeight = uni.getSystemInfoSync().windowHeight;
-
-      var that = this;
-      uni
-        .createSelectorQuery()
-        .select('#headinga')
-        .boundingClientRect(res => {
-          that.hh = windowHeight - res.height;
-
-          that.navCount = Math.round(that.hh / 50);
-        })
-        .exec();
+      if (this.timer) return;
+      if (!this.menuHeight) {
+        await this.getElRect('menu-scroll-view', 'menuHeight');
+      }
+      setTimeout(() => {
+        // 节流
+        this.timer = null;
+        // scrollHeight为右边菜单垂直中点位置
+        let scrollHeight = e.detail.scrollTop + this.menuHeight / 2;
+        for (let i = 0; i < this.arr.length; i++) {
+          let height1 = this.arr[i];
+          let height2 = this.arr[i + 1];
+          // 如果不存在height2，意味着数据循环已经到了最后一个，设置左边菜单为最后一项即可
+          if (!height2 || (scrollHeight >= height1 && scrollHeight < height2)) {
+            this.leftMenuStatus(i);
+            return;
+          }
+        }
+      }, 10);
     },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .price {
   font-size: 28rpx;
 }
@@ -415,52 +371,131 @@ export default {
   color: #303030;
   font-size: 26rpx;
 }
-/* .aaaa{ */
-
-/* } */
-.fixed {
-  position: fixed;
-  z-index: 99;
-}
-
-.VerticalNav.nav {
-  width: 200upx;
-  white-space: initial;
-}
-
-.VerticalNav.nav .cu-item {
+.banner {
   width: 100%;
-  text-align: center;
-  background-color: #fff;
-  margin: 0;
-  border: none;
-  height: 50px;
-  position: relative;
+  height: 370rpx;
 }
-
-.VerticalNav.nav .cu-item.cur {
-  background-color: #f1f1f1;
-}
-
-.VerticalNav.nav .cu-item.cur::after {
-  content: '';
-  width: 8upx;
-  height: 30upx;
-  border-radius: 10upx 0 0 10upx;
-  position: absolute;
-  background-color: currentColor;
-  top: 0;
-  right: 0upx;
-  bottom: 0;
-  margin: auto;
-}
-
-.VerticalBox {
+.u-wrap {
+  height: calc(100vh);
+  /* #ifdef H5 */
+  height: calc(100vh - var(--window-top));
+  /* #endif */
   display: flex;
+  flex-direction: column;
 }
 
-.VerticalMain {
-  background-color: #f1f1f1;
+.u-search-box {
+  padding: 18rpx 30rpx;
+}
+
+.u-menu-wrap {
   flex: 1;
+  display: flex;
+  overflow: hidden;
+  padding-left: 20rpx;
+}
+
+.u-search-inner {
+  background-color: rgb(234, 234, 234);
+  border-radius: 100rpx;
+  display: flex;
+  align-items: center;
+  padding: 10rpx 16rpx;
+}
+
+.u-search-text {
+  font-size: 26rpx;
+  color: $u-tips-color;
+  margin-left: 10rpx;
+}
+
+.u-tab-view {
+  width: 200rpx;
+  height: 100%;
+}
+
+.u-tab-item {
+  height: 110rpx;
+  background: #f6f6f6;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #444;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.u-tab-item-active {
+  position: relative;
+  color: #000;
+  font-size: 30rpx;
+  font-weight: 600;
+  background: #fff;
+}
+
+.u-tab-item-active::before {
+  content: '';
+  position: absolute;
+  border-left: 4px solid $u-primary;
+  height: 32rpx;
+  left: 0;
+  top: 39rpx;
+}
+
+.u-tab-view {
+  height: 100%;
+}
+
+.right-box {
+  background-color: rgb(250, 250, 250);
+}
+
+.page-view {
+  padding: 16rpx;
+}
+
+.class-item {
+  margin-bottom: 30rpx;
+  background-color: #fff;
+  padding: 16rpx;
+  border-radius: 8rpx;
+}
+
+.class-item:last-child {
+  min-height: 100vh;
+}
+
+.item-title {
+  font-size: 28rpx;
+  color: $u-main-color;
+  font-weight: bold;
+  margin-bottom: 50rpx;
+}
+
+.item-menu-name {
+  font-weight: normal;
+  font-size: 24rpx;
+  color: $u-main-color;
+}
+
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.thumb-box {
+  width: 33.333333%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 20rpx;
+}
+
+.item-menu-image {
+  width: 120rpx;
+  height: 120rpx;
 }
 </style>
