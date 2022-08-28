@@ -41,7 +41,11 @@
             </view>
 
             <view v-for="(item1, index1) in item.list" :key="index1" style="margin-bottom: 40rpx;">
-              <view class="flex row-between" style="margin-top: 10rpx;" @click="topath(item1)">
+              <view
+                class="flex row-between"
+                style="margin-top: 10rpx;"
+                @click="topath(item.label, item1)"
+              >
                 <view class="images">
                   <image :src="item1.image" class="images" mode=""></image>
                 </view>
@@ -109,6 +113,22 @@ export default {
   onReady() {
     this.getMenuItemTop();
   },
+  onShareAppMessage() {
+    return {
+      title: '徐州飞房网',
+      imageUrl: `https://www.flyfang.cn/xiaochengxu/weixinfenxiang/haoyou.png`,
+      path: '/pages/index/index',
+      desc: '一个相当好用的购房神器',
+    };
+  },
+  // 分享到朋友圈
+  onShareTimeline() {
+    return {
+      title: `徐州飞房网,一个相当好用的购房神器`,
+      imageUrl: `https://www.flyfang.cn/xiaochengxu/weixinfenxiang/pengyouquan.png`,
+      path: '/pages/index/index',
+    };
+  },
   methods: {
     click(index) {
       if (index == 0) {
@@ -130,10 +150,10 @@ export default {
         url: '/pages/index/web',
       });
     },
-    topath(item) {
-      uni.setStorageSync('url', item.url);
+    topath(label, item) {
+      uni.setStorageSync('item', item);
       uni.navigateTo({
-        url: '/pages/index/web',
+        url: '/pages/index/web?label=' + label,
       });
     },
     // 点击左边的栏目切换
