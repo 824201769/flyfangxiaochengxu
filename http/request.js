@@ -4,7 +4,7 @@ module.exports = () => {
   // 初始化请求配置
   uni.$u.http.setConfig((config) => {
     /* config 为默认全局配置*/
-    config.baseURL = 'https://www.flyfang.cn/api'; /* 根域名 */
+    config.baseURL = 'https://www.feifangwang.cn/api'; /* 根域名 */
     return config
   })
   // 请求拦截

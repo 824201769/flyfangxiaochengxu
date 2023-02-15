@@ -81,8 +81,8 @@ export default {
   data() {
     return {
       list1: [
-        'https://www.flyfang.cn/xiaochengxu/banner/1.png',
-        'https://www.flyfang.cn/xiaochengxu/banner/2.png',
+        'https://www.feifangwang.cn/xiaochengxu/banner/1.png',
+        'https://www.feifangwang.cn/xiaochengxu/banner/2.png',
       ],
       scrollTop: 0, //tab标题的滚动条位置
       oldScrollTop: 0,
@@ -116,7 +116,7 @@ export default {
   onShareAppMessage() {
     return {
       title: '徐州飞房网',
-      imageUrl: `https://www.flyfang.cn/xiaochengxu/weixinfenxiang/haoyou.png`,
+      imageUrl: `https://www.feifangwang.cn/xiaochengxu/weixinfenxiang/haoyou.png`,
       path: '/pages/index/index',
       desc: '一个相当好用的购房神器',
     };
@@ -125,7 +125,7 @@ export default {
   onShareTimeline() {
     return {
       title: `徐州飞房网,一个相当好用的购房神器`,
-      imageUrl: `https://www.flyfang.cn/xiaochengxu/weixinfenxiang/pengyouquan.png`,
+      imageUrl: `https://www.feifangwang.cn/xiaochengxu/weixinfenxiang/pengyouquan.png`,
       path: '/pages/index/index',
     };
   },
@@ -133,17 +133,17 @@ export default {
     click(index) {
       if (index == 0) {
         // #ifdef MP-TOUTIAO
-        uni.setStorageSync('url', 'https://www.flyfang.cn/dyxiaochengxu/index1.html');
+        uni.setStorageSync('item', { url: 'https://www.feifangwang.cn/dyxiaochengxu/index1.html' });
         // #endif
         // #ifdef MP-WEIXIN
-        uni.setStorageSync('url', 'https://www.flyfang.cn/xiaochengxu/index1.html');
+        uni.setStorageSync('item', { url: 'https://www.feifangwang.cn/xiaochengxu/index1.html' });
         // #endif
       } else {
         // #ifdef MP-TOUTIAO
-        uni.setStorageSync('url', 'https://www.flyfang.cn/dyxiaochengxu/index2.html');
+        uni.setStorageSync('item', { url: 'https://www.feifangwang.cn/dyxiaochengxu/index2.html' });
         // #endif
         // #ifdef MP-WEIXIN
-        uni.setStorageSync('url', 'https://www.flyfang.cn/xiaochengxu/index2.html');
+        uni.setStorageSync('item', { url: 'https://www.feifangwang.cn/xiaochengxu/index2.html' });
         // #endif
       }
       uni.navigateTo({
